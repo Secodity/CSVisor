@@ -6,8 +6,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVisor.WPF"
         mc:Ignorable="d"
-        Title="CSVisor" Height="450" Width="800">
+        Title="CS Visor" Height="450" Width="800">
     <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Select File"
+                Margin="10"
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="200"
+                HorizontalAlignment="Left"
+                Click="__SelectFile"/>
+
+        <Canvas Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Background="Gray"
+                Margin="10">            
+        </Canvas>
 
     </Grid>
 </Mah:MetroWindow>

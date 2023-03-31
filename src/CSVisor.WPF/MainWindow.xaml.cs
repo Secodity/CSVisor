@@ -1,19 +1,7 @@
 ﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVisor.WPF
 {
@@ -22,15 +10,22 @@ namespace CSVisor.WPF
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        private MainWindowViewModel _ViewModel => DataContext as MainWindowViewModel;
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
         }
 
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
             ThemeManager.Current.ChangeTheme(this, "Dark.Orange");
+        }
+
+        private void __SelectFile(object sender, RoutedEventArgs e)
+        {
+            _ViewModel.SelectFile();
         }
     }
 }

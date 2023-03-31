@@ -53,7 +53,7 @@ namespace CSVisor.Core.Entities
             }
             foreach(var line in separatorLineExists ? lines.Skip(1) : lines)
             {
-                Lines.Append(line.Split(separator));
+                Lines.Add(line.Split(separator));
             }
         }
         #endregion
