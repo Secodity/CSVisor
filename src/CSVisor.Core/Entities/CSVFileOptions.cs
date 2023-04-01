@@ -19,7 +19,8 @@ namespace CSVisor.Core.Entities
         public CSVFile File { get; set; }
         public uint UniqueIdentifyColumn { get; set; }
         public Type UniqueIdentifyColumnType { get; set; }
-        public IList<Tuple<uint, Type, bool>> SortingColumns { get; set; } = new List<Tuple<uint, Type, bool>>();
+        public IList<Tuple<uint, eSortDirection>> GroupingSortingColumns { get; set; } = new List<Tuple<uint, eSortDirection>>();
+        public IList<Tuple<uint, eSortDirection>> StateSortingColumns { get; set; } = new List<Tuple<uint, eSortDirection>>();
         #endregion
     }
 }
