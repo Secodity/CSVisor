@@ -9,3 +9,4 @@ An open source csv visualisation tool.
 	- [ ] Determine which columns should be displayed as additional images
 - [ ] Export visible area as pdf
 - [ ] Export complete area as pdf
+- [ ] Save session
