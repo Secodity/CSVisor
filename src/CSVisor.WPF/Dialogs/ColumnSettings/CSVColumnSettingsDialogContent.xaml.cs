@@ -39,5 +39,11 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             OkRequested?.Invoke(this, EventArgs.Empty);
         }
+
+        private void __SwitchSortDirection(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is CSVColumnSortingViewModel vm)
+                vm.SwitchSortDirection();
+        }
     }
 }

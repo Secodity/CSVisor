@@ -2,9 +2,7 @@
 using CSVisor.Core.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace CSVisor.WPF.ViewModels
 {
@@ -18,6 +16,7 @@ namespace CSVisor.WPF.ViewModels
         {
             SortingEntity = new CSVColumnSorting();
             Columns = columns;
+            SwitchSortDirection();
         }
 
         public CSVColumnSorting SortingEntity
@@ -35,7 +34,7 @@ namespace CSVisor.WPF.ViewModels
                 SortingEntity.SelectedColumn = value;
                 OnPropertyChanged(nameof(SelectedColumn));
                 ColumnSortingChanged?.Invoke(this, SelectedColumn);
-                if(!AlreadyAddedNew)
+                if (!AlreadyAddedNew)
                 {
                     AddNewEmptyRequired?.Invoke(this, EventArgs.Empty);
                     AlreadyAddedNew = true;
@@ -49,15 +48,34 @@ namespace CSVisor.WPF.ViewModels
             set => Set(value);
         }
 
+        public eSortDirection SortDirection
+        {
+            get => Get<eSortDirection>();
+            set => Set(value);
+        }
+
         public List<string> Columns
         {
             get => Get<List<string>>();
             set => Set(value);
         }
 
+        public Visibility IsDescending => SortDirection == eSortDirection.Descending ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsNotDescending => SortDirection == eSortDirection.Descending ? Visibility.Collapsed : Visibility.Visible;
+
         public void Remove()
         {
             RemoveRequested?.Invoke(this, this);
+        }
+
+        public void SwitchSortDirection()
+        {
+            if (SortDirection == eSortDirection.Ascending)
+                SortDirection = eSortDirection.Descending;
+            else
+                SortDirection = eSortDirection.Ascending;
+            OnPropertyChanged(nameof(IsDescending));
+            OnPropertyChanged(nameof(IsNotDescending));
         }
 
 

@@ -38,8 +38,8 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             if (__CanClose())
             {
-                _ViewModel.StateSortEntries.ToList().ForEach(s => _FileOptions.StateSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.StateSortEntries.IndexOf(s), eSortDirection.Descending)));
-                _ViewModel.GroupSortEntries.ToList().ForEach(s => _FileOptions.GroupingSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.GroupSortEntries.IndexOf(s), eSortDirection.Descending)));
+                _ViewModel.StateSortEntries.ToList().ForEach(s => _FileOptions.StateSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.StateSortEntries.IndexOf(s), s.SortDirection)));
+                _ViewModel.GroupSortEntries.ToList().ForEach(s => _FileOptions.GroupingSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.GroupSortEntries.IndexOf(s), s.SortDirection)));
                 _Window.Close();
             }
         }

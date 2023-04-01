@@ -22,10 +22,12 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         private const string FakeCSVLineType = "FakeCSVLineType";
         private const string FakePropertyBaseName = "DynamicProperty";
         private CSVFileOptions _Options;
+
         public CSVColumnSettingsDialogViewModel(CSVFileOptions options)
         {
             _Options = options;
             __Init();
+
         }
 
         private void __Init()
@@ -68,6 +70,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             get => Get<ObservableCollection<CSVColumnSortingViewModel>>();
             set => Set(value);
         }
+
 
         public string SelectedPrimaryProperty
         {
@@ -181,7 +184,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
                 return;
             }
             var alreadyUsedCollection = __GetAlreadyUsedCollection(baseSender);
-            if(newCollection == null)
+            if (newCollection == null)
                 newCollection = __GetSortCollection(baseSender);
             var otherEntries = PropertyNames.Except(alreadyUsedCollection).ToList();
             if (!otherEntries.Any())

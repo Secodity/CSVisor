@@ -30,6 +30,7 @@
 
         <ComboBox x:Name="groupingCbo" ItemsSource="{Binding PropertyNames, Mode=TwoWay}"
                   SelectedItem="{Binding SelectedPrimaryProperty, Mode=TwoWay}"
+                  SelectedIndex="0"
                   Grid.Column="1"
                   Grid.Row="0"
                   Width="200"
@@ -49,15 +50,39 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ComboBox ItemsSource="{Binding Columns, Mode=TwoWay}"
                                           SelectedItem="{Binding SelectedColumn, Mode=TwoWay}"
                                           HorizontalAlignment="Left"
                                           Grid.Column="0"
                                           Width="200"/>
+
                                 <Button Margin="10 0 0 0"
+                                        Visibility="{Binding IsDescending}"
                                     Width="30" Height="30"
                                     Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__SwitchSortDirection">
+                                    <Viewbox>
+                                        <Path Data="M19 7H22L18 3L14 7H17V21H19M11 13V15L7.67 19H11V21H5V19L8.33 15H5V13M9 3H7C5.9 3 5 3.9 5 5V11H7V9H9V11H11V5C11 3.9 10.11 3 9 3M9 7H7V5H9Z" Fill="White"/>
+                                    </Viewbox>
+                                </Button>
+
+                                <Button Margin="10 0 0 0"
+                                        Visibility="{Binding IsNotDescending}"
+                                    Width="30" Height="30"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__SwitchSortDirection">
+                                    <Viewbox>
+                                        <Path Data="M19 17H22L18 21L14 17H17V3H19M11 13V15L7.67 19H11V21H5V19L8.33 15H5V13M9 3H7C5.9 3 5 3.9 5 5V11H7V9H9V11H11V5C11 3.9 10.11 3 9 3M9 7H7V5H9Z" Fill="White"/>
+                                    </Viewbox>
+                                </Button>
+
+                                <Button Margin="10 0 0 0"
+                                    Width="30" Height="30"
+                                    Grid.Column="2"
                                     HorizontalAlignment="Left"
                                         Click="__Remove">
                                     <Viewbox>
@@ -83,15 +108,40 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ComboBox ItemsSource="{Binding Columns, Mode=TwoWay}"
                                           SelectedItem="{Binding SelectedColumn, Mode=TwoWay}"
                                           HorizontalAlignment="Left"
                                           Grid.Column="0"
                                           Width="200"/>
+
                                 <Button Margin="10 0 0 0"
+                                        Visibility="{Binding IsDescending}"
                                     Width="30" Height="30"
                                     Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__SwitchSortDirection">
+                                    <Viewbox>
+                                        <Path Data="M19 7H22L18 3L14 7H17V21H19M11 13V15L7.67 19H11V21H5V19L8.33 15H5V13M9 3H7C5.9 3 5 3.9 5 5V11H7V9H9V11H11V5C11 3.9 10.11 3 9 3M9 7H7V5H9Z" Fill="White"/>
+                                    </Viewbox>
+                                </Button>
+
+                                <Button Margin="10 0 0 0"
+                                        Visibility="{Binding IsNotDescending}"
+                                    Width="30" Height="30"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__SwitchSortDirection">
+                                    <Viewbox>
+                                        <Path Data="M19 17H22L18 21L14 17H17V3H19M11 13V15L7.67 19H11V21H5V19L8.33 15H5V13M9 3H7C5.9 3 5 3.9 5 5V11H7V9H9V11H11V5C11 3.9 10.11 3 9 3M9 7H7V5H9Z" Fill="White"/>
+                                    </Viewbox>
+                                </Button>
+
+
+                                <Button Margin="10 0 0 0"
+                                    Width="30" Height="30"
+                                    Grid.Column="2"
                                     HorizontalAlignment="Left"
                                         Click="__Remove">
                                     <Viewbox>
