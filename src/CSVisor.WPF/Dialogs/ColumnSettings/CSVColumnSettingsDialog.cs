@@ -1,11 +1,14 @@
 ﻿using ControlzEx.Theming;
 using CSVisor.Core.Entities;
+using CSVisor.Core.Extender;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 
 namespace CSVisor.WPF.Dialogs.ColumnSettings
@@ -14,13 +17,40 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
     {
         private CSVColumnSettingsWindow _Window;
         private CSVColumnSettingsDialogContent _Content;
+        private CSVColumnSettingsDialogViewModel _ViewModel;
 
         public CSVColumnSettingsDialog(CSVFileOptions options)
         {
             _Window = new CSVColumnSettingsWindow();
             _Content = new CSVColumnSettingsDialogContent();
+            _Content.OkRequested += __Content_OkRequested;
+            _Content.CancelRequested += __Content_CancelRequested;
             _Window.Content = _Content;
-            _Content.DataContext = new CSVColumnSettingsDialogViewModel(options);
+            _ViewModel = new CSVColumnSettingsDialogViewModel(options);
+            _Content.DataContext = _ViewModel;
+        }
+
+        private void __Content_CancelRequested(object? sender, EventArgs e)
+        {
+            _Window.Close();
+        }
+
+        private void __Content_OkRequested(object? sender, EventArgs e)
+        {
+            if (__CanClose())
+                _Window.Close();
+        }
+
+        private bool __CanClose()
+        {
+            bool canClose = true;
+            if(_ViewModel.SelectedPrimaryProperty.IsNullOrEmpty())
+            {
+                canClose = false;
+                _Window.ShowMessageAsync("Cannot close", "No grouping key set");
+            }
+
+            return canClose;
         }
 
         public void Show()

@@ -1,5 +1,6 @@
 ﻿using ControlzEx.Theming;
 using CSVisor.WPF.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,6 +11,8 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
     /// </summary>
     public partial class CSVColumnSettingsDialogContent
     {
+        public event EventHandler CancelRequested;
+        public event EventHandler OkRequested;
         public CSVColumnSettingsDialogContent()
         {
             InitializeComponent();
@@ -25,6 +28,16 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             if (sender is Button btn && btn.DataContext is CSVColumnSortingViewModel vm)
                 vm.Remove();
+        }
+
+        private void __Cancel(object sender, RoutedEventArgs e)
+        {
+            CancelRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void __Ok(object sender, RoutedEventArgs e)
+        {
+            OkRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }

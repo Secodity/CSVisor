@@ -16,6 +16,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -27,8 +28,8 @@
                    Grid.Column="0"
                    Grid.Row="0"/>
 
-        <ComboBox ItemsSource="{Binding PropertyNames, Mode=TwoWay}"
-                  SelectedItem="{Binding SelectedProperty, Mode=TwoWay}"
+        <ComboBox x:Name="groupingCbo" ItemsSource="{Binding PropertyNames, Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedPrimaryProperty, Mode=TwoWay}"
                   Grid.Column="1"
                   Grid.Row="0"
                   Width="200"
@@ -114,6 +115,19 @@
                       AutoGenerateColumns="True"
                       IsReadOnly="True"/>
         </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Grid.Row="3"
+                    Grid.Column="1">
+            <Button Content="Cancel"
+                    Width="150"
+                    Click="__Cancel"/>
+            <Button Content="Ok"
+                    Width="150"
+                    Margin="10 0 0 0"
+                    Click="__Ok"/>
+        </StackPanel>
 
     </Grid>
 </UserControl>

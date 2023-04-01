@@ -69,7 +69,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             set => Set(value);
         }
 
-        public string SelectedProperty
+        public string SelectedPrimaryProperty
         {
             get => Get<string>();
             set
@@ -95,7 +95,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, Brushes.Transparent));
             notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(2)));
             notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, Brushes.Transparent));
-            var column = PreviewGrid.Columns.FirstOrDefault(c => c.Header.Equals(SelectedProperty));
+            var column = PreviewGrid.Columns.FirstOrDefault(c => c.Header.Equals(SelectedPrimaryProperty));
             if (column != null)
             {
                 PreviewGrid.Columns.Except(new List<DataGridColumn> { column }).ToList().ForEach(c => c.HeaderStyle = notSelectedStyle);
