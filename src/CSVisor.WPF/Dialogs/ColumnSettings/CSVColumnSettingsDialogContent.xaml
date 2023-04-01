@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -34,7 +35,76 @@
                   HorizontalAlignment="Left"
                   Margin="10 0 0 0"/>
 
+
         <ScrollViewer Grid.Row="1"
+                      Grid.Column="0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Group Sortcolumns"
+                           Margin="0 10 0 0"/>
+                <HeaderedItemsControl ItemsSource="{Binding GroupSortEntries, Mode=TwoWay}">
+                    <HeaderedItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox ItemsSource="{Binding Columns, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedColumn, Mode=TwoWay}"
+                                          HorizontalAlignment="Left"
+                                          Grid.Column="0"
+                                          Width="200"/>
+                                <Button Margin="10 0 0 0"
+                                    Width="30" Height="30"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__Remove">
+                                    <Viewbox>
+                                        <Path Data="M966.4 761.6l-140.8 140.8-313.6-320-313.6 320-140.8-140.8 320-313.6-320-313.6 140.8-140.8 313.6 320 313.6-320 140.8 140.8-320 313.6z" Fill="Red"/>
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </HeaderedItemsControl.ItemTemplate>
+                </HeaderedItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text=" State Sortcolumns"
+                           Margin="0 10 0 0"/>
+                <HeaderedItemsControl ItemsSource="{Binding StateSortEntries, Mode=TwoWay}">
+                    <HeaderedItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox ItemsSource="{Binding Columns, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedColumn, Mode=TwoWay}"
+                                          HorizontalAlignment="Left"
+                                          Grid.Column="0"
+                                          Width="200"/>
+                                <Button Margin="10 0 0 0"
+                                    Width="30" Height="30"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                        Click="__Remove">
+                                    <Viewbox>
+                                        <Path Data="M966.4 761.6l-140.8 140.8-313.6-320-313.6 320-140.8-140.8 320-313.6-320-313.6 140.8-140.8 313.6 320 313.6-320 140.8 140.8-320 313.6z" Fill="Red"/>
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </HeaderedItemsControl.ItemTemplate>
+                </HeaderedItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="2"
                       Grid.Column="0"
                       Grid.ColumnSpan="2"
                       VerticalAlignment="Bottom"

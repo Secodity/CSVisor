@@ -1,7 +1,10 @@
 ﻿using CSVisor.Core.BaseClasses;
 using CSVisor.Core.Entities;
+using CSVisor.Core.Extender;
+using CSVisor.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -43,6 +46,29 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             set => Set(value);
         }
 
+        public List<string> AlreadyUsedGroupSortColumns
+        {
+            get => Get<List<string>>();
+            set => Set(value);
+        }
+        public List<string> AlreadyUsedStateSortColumns
+        {
+            get => Get<List<string>>();
+            set => Set(value);
+        }
+
+        public ObservableCollection<CSVColumnSortingViewModel> GroupSortEntries
+        {
+            get => Get<ObservableCollection<CSVColumnSortingViewModel>>();
+            set => Set(value);
+        }
+
+        public ObservableCollection<CSVColumnSortingViewModel> StateSortEntries
+        {
+            get => Get<ObservableCollection<CSVColumnSortingViewModel>>();
+            set => Set(value);
+        }
+
         public string SelectedProperty
         {
             get => Get<string>();
@@ -63,6 +89,8 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
 
         private void __RefreshBorders()
         {
+            if (PreviewGrid == null)
+                return;
             var notSelectedStyle = new Style(typeof(DataGridColumnHeader), new Style(typeof(DataGridColumnHeader)));
             notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, Brushes.Transparent));
             notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(2)));
@@ -80,6 +108,12 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
 
         private void __DefineDynamicAssemblyEntityAndAdd(IEnumerable<IReadOnlyList<string>> sampleLines)
         {
+            GroupSortEntries = new ObservableCollection<CSVColumnSortingViewModel>();
+            StateSortEntries = new ObservableCollection<CSVColumnSortingViewModel>();
+            AlreadyUsedGroupSortColumns = new List<string>();
+            AlreadyUsedStateSortColumns = new List<string>();
+            GroupSortEntries.CollectionChanged += __SortEntries_CollectionChanged;
+            StateSortEntries.CollectionChanged += __SortEntries_CollectionChanged;
             var assemblyName = new AssemblyName(FakeAssemblyName);
             var ab = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
             var mb = ab.DefineDynamicModule(FakeAsseblyModule);
@@ -117,6 +151,8 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
                 property.SetSetMethod(dSetAccessor);
             }
             PropertyNames = tmpPropertyNameList;
+            __AddEmptySortingEntry(true, null, null);
+
             fakeType.CreateType();
 
             var dynamicLines = new List<dynamic>();
@@ -137,5 +173,97 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             SampleDataSource = dynamicLines;
         }
 
+        private void __AddEmptySortingEntry(bool init, CSVColumnSortingViewModel baseSender, ObservableCollection<CSVColumnSortingViewModel> newCollection)
+        {
+            if (init)
+            {
+                __InitEmptyItems();
+                return;
+            }
+            var alreadyUsedCollection = __GetAlreadyUsedCollection(baseSender);
+            if(newCollection == null)
+                newCollection = __GetSortCollection(baseSender);
+            var otherEntries = PropertyNames.Except(alreadyUsedCollection).ToList();
+            if (!otherEntries.Any())
+                return;
+            __AddNewOnCollection(newCollection, otherEntries);
+        }
+
+        private void __AddNewOnCollection(ObservableCollection<CSVColumnSortingViewModel> newCollection, List<string> otherEntries)
+        {
+            var sortingViewModel = new CSVColumnSortingViewModel(otherEntries);
+            sortingViewModel.ColumnSortingChanged += __SortingViewModel_ColumnSortingChanged;
+            sortingViewModel.RemoveRequested += __SortingViewModel_RemoveRequested;
+            sortingViewModel.AddNewEmptyRequired += __SortingViewModel_AddNewEmptyRequired; ;
+            newCollection.Add(sortingViewModel);
+        }
+
+        private void __InitEmptyItems()
+        {
+            __AddNewOnCollection(StateSortEntries, PropertyNames);
+            __AddNewOnCollection(GroupSortEntries, PropertyNames);
+        }
+
+        private void __SortingViewModel_AddNewEmptyRequired(object? sender, EventArgs e)
+        {
+            __AddEmptySortingEntry(false, sender as CSVColumnSortingViewModel, null);
+        }
+
+        private void __SortingViewModel_RemoveRequested(object? sender, CSVColumnSortingViewModel e)
+        {
+            var alreadyUsedCollection = __GetAlreadyUsedCollection(e);
+            var sortCollection = __GetSortCollection(e);
+            if (sortCollection == null || alreadyUsedCollection == null)
+                return;
+            alreadyUsedCollection.Remove(e.SelectedColumn);
+            sortCollection.Remove(e);
+            if (!sortCollection.Any())
+            {
+                alreadyUsedCollection.Clear();
+                __AddEmptySortingEntry(false, sender as CSVColumnSortingViewModel, sortCollection);
+            }
+        }
+
+        private List<string> __GetAlreadyUsedCollection(CSVColumnSortingViewModel e)
+        {
+            if (GroupSortEntries.Contains(e))
+            {
+                return AlreadyUsedGroupSortColumns;
+            }
+            else if (StateSortEntries.Contains(e))
+            {
+                return AlreadyUsedStateSortColumns;
+            }
+            return new List<string>();
+        }
+
+        private ObservableCollection<CSVColumnSortingViewModel> __GetSortCollection(CSVColumnSortingViewModel e)
+        {
+            if (GroupSortEntries.Contains(e))
+            {
+                return GroupSortEntries;
+            }
+            else if (StateSortEntries.Contains(e))
+            {
+                return StateSortEntries;
+            }
+            return new ObservableCollection<CSVColumnSortingViewModel>();
+        }
+
+        private void __SortingViewModel_ColumnSortingChanged(object? sender, string e)
+        {
+            var alreadyUsedCollection = __GetAlreadyUsedCollection(sender as CSVColumnSortingViewModel);
+            if (alreadyUsedCollection == null)
+                return;
+            if (sender is CSVColumnSortingViewModel vm && vm.AlreadyAddedNew && vm.PreviousSelectedColumn.IsNotNullNorEmpty())
+                alreadyUsedCollection.Remove(vm.PreviousSelectedColumn);
+            alreadyUsedCollection.Add(e);
+        }
+
+        private void __SortEntries_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(GroupSortEntries));
+            OnPropertyChanged(nameof(StateSortEntries));
+        }
     }
 }

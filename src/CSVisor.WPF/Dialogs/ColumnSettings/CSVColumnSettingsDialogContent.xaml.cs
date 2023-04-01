@@ -1,18 +1,7 @@
 ﻿using ControlzEx.Theming;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CSVisor.WPF.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CSVisor.WPF.Dialogs.ColumnSettings
 {
@@ -32,9 +21,10 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             ThemeManager.Current.ChangeTheme(this, "Dark.Orange");
         }
 
-        private void __CSVColumnSettingsDialogContent_DataContextChanged()
+        private void __Remove(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (sender is Button btn && btn.DataContext is CSVColumnSortingViewModel vm)
+                vm.Remove();
         }
     }
 }
