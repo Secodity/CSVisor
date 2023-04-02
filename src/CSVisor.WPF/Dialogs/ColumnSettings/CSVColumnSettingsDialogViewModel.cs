@@ -59,6 +59,12 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             set => Set(value);
         }
 
+        public List<string> AlreadyUsedGroupingColumns
+        {
+            get => Get<List<string>>();
+            set => Set(value);
+        }
+
         public ObservableCollection<CSVColumnSortingViewModel> GroupSortEntries
         {
             get => Get<ObservableCollection<CSVColumnSortingViewModel>>();
@@ -71,17 +77,10 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             set => Set(value);
         }
 
-
-        public string SelectedPrimaryProperty
+        public ObservableCollection<CSVColumnSortingViewModel> GroupingEntries
         {
-            get => Get<string>();
-            set
-            {
-                Set(value);
-                _Options.UniqueIdentifyColumnType = typeof(string);
-                _Options.UniqueIdentifyColumn = (uint)PropertyNames.IndexOf(value);
-                __RefreshBorders();
-            }
+            get => Get<ObservableCollection<CSVColumnSortingViewModel>>();
+            set => Set(value);
         }
 
         public DataGrid PreviewGrid
@@ -90,33 +89,17 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             set => Set(value);
         }
 
-        private void __RefreshBorders()
-        {
-            if (PreviewGrid == null)
-                return;
-            var notSelectedStyle = new Style(typeof(DataGridColumnHeader), new Style(typeof(DataGridColumnHeader)));
-            notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, Brushes.Transparent));
-            notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(2)));
-            notSelectedStyle.Setters.Add(new Setter(DataGridColumnHeader.BackgroundProperty, Brushes.Transparent));
-            var column = PreviewGrid.Columns.FirstOrDefault(c => c.Header.Equals(SelectedPrimaryProperty));
-            if (column != null)
-            {
-                PreviewGrid.Columns.Except(new List<DataGridColumn> { column }).ToList().ForEach(c => c.HeaderStyle = notSelectedStyle);
-                var style = new Style(typeof(DataGridColumnHeader), new Style(typeof(DataGridColumnHeader)));
-                style.Setters.Add(new Setter(DataGridColumnHeader.BorderBrushProperty, Brushes.Red));
-                style.Setters.Add(new Setter(DataGridColumnHeader.BorderThicknessProperty, new Thickness(2)));
-                column.HeaderStyle = style;
-            }
-        }
-
         private void __DefineDynamicAssemblyEntityAndAdd(IEnumerable<IReadOnlyList<string>> sampleLines)
         {
             GroupSortEntries = new ObservableCollection<CSVColumnSortingViewModel>();
             StateSortEntries = new ObservableCollection<CSVColumnSortingViewModel>();
+            GroupingEntries = new ObservableCollection<CSVColumnSortingViewModel>();
             AlreadyUsedGroupSortColumns = new List<string>();
             AlreadyUsedStateSortColumns = new List<string>();
+            AlreadyUsedGroupingColumns = new List<string>();
             GroupSortEntries.CollectionChanged += __SortEntries_CollectionChanged;
             StateSortEntries.CollectionChanged += __SortEntries_CollectionChanged;
+            GroupingEntries.CollectionChanged += __SortEntries_CollectionChanged;
             var assemblyName = new AssemblyName(FakeAssemblyName);
             var ab = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
             var mb = ab.DefineDynamicModule(FakeAsseblyModule);
@@ -205,6 +188,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             __AddNewOnCollection(StateSortEntries, PropertyNames);
             __AddNewOnCollection(GroupSortEntries, PropertyNames);
+            __AddNewOnCollection(GroupingEntries, PropertyNames);
         }
 
         private void __SortingViewModel_AddNewEmptyRequired(object? sender, EventArgs e)
@@ -237,6 +221,10 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             {
                 return AlreadyUsedStateSortColumns;
             }
+            else if (GroupingEntries.Contains(e))
+            {
+                return AlreadyUsedGroupingColumns;
+            }
             return new List<string>();
         }
 
@@ -249,6 +237,10 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
             else if (StateSortEntries.Contains(e))
             {
                 return StateSortEntries;
+            }
+            else if (GroupingEntries.Contains(e))
+            {
+                return GroupingEntries;
             }
             return new ObservableCollection<CSVColumnSortingViewModel>();
         }
@@ -267,6 +259,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             OnPropertyChanged(nameof(GroupSortEntries));
             OnPropertyChanged(nameof(StateSortEntries));
+            OnPropertyChanged(nameof(GroupingEntries));
         }
     }
 }

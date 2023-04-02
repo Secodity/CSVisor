@@ -13,33 +13,57 @@
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Grouping Key:"
-                   Grid.Column="0"
-                   Grid.Row="0"/>
+        <ScrollViewer Grid.Row="0"
+                      Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Grouping Keys:"
+                           Margin="0 10 0 0"/>
+                <HeaderedItemsControl ItemsSource="{Binding GroupingEntries, Mode=TwoWay}">
+                    <HeaderedItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox ItemsSource="{Binding Columns, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedColumn, Mode=TwoWay}"
+                                          HorizontalAlignment="Left"
+                                          Grid.Column="0"
+                                          Width="200"/>
 
-        <ComboBox x:Name="groupingCbo" ItemsSource="{Binding PropertyNames, Mode=TwoWay}"
-                  SelectedItem="{Binding SelectedPrimaryProperty, Mode=TwoWay}"
-                  SelectedIndex="0"
-                  Grid.Column="1"
-                  Grid.Row="0"
-                  Width="200"
-                  HorizontalAlignment="Left"
-                  Margin="10 0 0 0"/>
+                                <Button Margin="10 0 0 0"
+                                    Width="30" Height="30"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Left"
+                                        Click="__Remove">
+                                    <Viewbox>
+                                        <Path Data="M966.4 761.6l-140.8 140.8-313.6-320-313.6 320-140.8-140.8 320-313.6-320-313.6 140.8-140.8 313.6 320 313.6-320 140.8 140.8-320 313.6z" Fill="Red"/>
+                                    </Viewbox>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </HeaderedItemsControl.ItemTemplate>
+                </HeaderedItemsControl>
+            </StackPanel>
+        </ScrollViewer>
 
-
-        <ScrollViewer Grid.Row="1"
-                      Grid.Column="0">
+        <ScrollViewer Grid.Row="0"
+                      Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Group Sortcolumns"
                            Margin="0 10 0 0"/>
@@ -96,8 +120,9 @@
             </StackPanel>
         </ScrollViewer>
 
-        <ScrollViewer Grid.Row="1"
-                      Grid.Column="1">
+        <ScrollViewer Grid.Row="0"
+                      Grid.Column="2"
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text=" State Sortcolumns"
                            Margin="0 10 0 0"/>
@@ -155,11 +180,12 @@
             </StackPanel>
         </ScrollViewer>
 
-        <ScrollViewer Grid.Row="2"
+        <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      VerticalAlignment="Bottom"
-                      HorizontalScrollBarVisibility="Auto">
+                      Grid.ColumnSpan="3"
+                      VerticalAlignment="Stretch"
+                      HorizontalScrollBarVisibility="Auto"
+                      Margin="0 0 0 20">
             <DataGrid x:Name="previewDataGrid" 
                       ItemsSource="{Binding SampleDataSource,Mode=TwoWay}" 
                       AutoGenerateColumns="True"
@@ -168,8 +194,8 @@
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
-                    Grid.Row="3"
-                    Grid.Column="1">
+                    Grid.Row="2"
+                    Grid.Column="2">
             <Button Content="Cancel"
                     Width="150"
                     Click="__Cancel"/>

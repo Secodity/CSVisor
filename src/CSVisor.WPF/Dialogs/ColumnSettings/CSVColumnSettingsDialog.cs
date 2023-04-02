@@ -38,6 +38,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         {
             if (__CanClose())
             {
+                _ViewModel.GroupingEntries.ToList().ForEach(s => _FileOptions.UniqueIdentifyColumns.Add((uint)_ViewModel.GroupingEntries.IndexOf(s)));
                 _ViewModel.StateSortEntries.ToList().ForEach(s => _FileOptions.StateSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.StateSortEntries.IndexOf(s), s.SortDirection)));
                 _ViewModel.GroupSortEntries.ToList().ForEach(s => _FileOptions.GroupingSortingColumns.Add(new Tuple<uint, eSortDirection>((uint)_ViewModel.GroupSortEntries.IndexOf(s), s.SortDirection)));
                 _Window.Close();
@@ -47,7 +48,7 @@ namespace CSVisor.WPF.Dialogs.ColumnSettings
         private bool __CanClose()
         {
             bool canClose = true;
-            if (_ViewModel.SelectedPrimaryProperty.IsNullOrEmpty())
+            if (!_ViewModel.GroupingEntries.Any())
             {
                 canClose = false;
                 _Window.ShowMessageAsync("Cannot close", "No grouping key set");
